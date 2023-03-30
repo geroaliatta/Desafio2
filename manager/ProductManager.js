@@ -40,7 +40,18 @@ export default class ProductManager{
         };
     }
 
-    updateProduct
+    updateProduct = async (id, prod) =>{
+        const products = await this.getProducts();
+        const product = products.find(e => e.id == id);
+        if (!product) {
+            console.log("Not found");
+        } else {
+            const newProduct = {...product, ...prod}
+            products.splice(products.indexOf(product), 1, newProduct);
+            await fs.promises.writeFile(this.path, JSON.stringify(products,null,'\t'))
+            console.log("Product updated successfully");
+        };
+    }
 
     deleteProduct = async (id) =>{
         const products = await this.getProducts();
